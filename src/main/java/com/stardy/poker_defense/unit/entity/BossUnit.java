@@ -1,7 +1,7 @@
 package com.stardy.poker_defense.unit.entity;
 
 import com.stardy.poker_defense.game.entity.Game;
-import com.stardy.poker_defense.round.Round;
+import com.stardy.poker_defense.round.entity.Round;
 import jakarta.persistence.*;
 import lombok.*;
 
