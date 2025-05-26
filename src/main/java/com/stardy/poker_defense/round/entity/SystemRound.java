@@ -1,4 +1,4 @@
-package com.stardy.poker_defense.round;
+package com.stardy.poker_defense.round.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

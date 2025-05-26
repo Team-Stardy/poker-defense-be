@@ -1,4 +1,4 @@
-package com.stardy.poker_defense.round;
+package com.stardy.poker_defense.round.entity;
 
 import com.stardy.poker_defense.game.entity.Game;
 import com.stardy.poker_defense.unit.entity.BossUnit;
