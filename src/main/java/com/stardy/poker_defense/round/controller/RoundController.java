@@ -26,9 +26,6 @@ public class RoundController {
     @GetMapping("/system-rounds")
     public ResponseEntity<ApiResponse<Object>> getSystemRoundList() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-
         List<GetSystemRoundListResponseDto> resultList = roundService.getSystemRoundList();
 
         return ApiResponse.builder()
@@ -36,14 +33,10 @@ public class RoundController {
                 .status(HttpStatus.OK)
                 .message("시스템 라운드 정보를 조회하였습니다.")
                 .success();
-
     }
 
     @PostMapping("/system-rounds")
     public ResponseEntity<ApiResponse<Object>> createSystemRound(@RequestBody CreateSystemRoundRequestDto params) {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
 
         roundService.createSystemRound(params);
 
