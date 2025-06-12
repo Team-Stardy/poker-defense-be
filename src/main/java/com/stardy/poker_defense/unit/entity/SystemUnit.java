@@ -20,19 +20,15 @@ public class SystemUnit {
 
     private Integer hp;
 
-    private Integer AttackPower;
+    private Integer attackPower;
 
-    private Integer AttackRange;
+    private Integer attackRange;
 
     private Integer defense;
 
     private CardSuit suit;
 
     private String number;
-
-    private Double xPos;
-
-    private Double yPos;
 
     private UnitType type;
 }

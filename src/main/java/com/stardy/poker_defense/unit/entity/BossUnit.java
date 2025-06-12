@@ -5,6 +5,8 @@ import com.stardy.poker_defense.round.entity.Round;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Optional;
+
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,4 +31,18 @@ public class BossUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
     private Game game;
+
+    private Integer hp;
+
+    private Integer defense;
+
+    private CardSuit suit;
+
+    private String number;
+
+    private Double xPos;
+
+    private Double yPos;
+
+    private UnitType type;
 }
