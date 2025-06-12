@@ -18,8 +18,6 @@ public class EnemyUnit {
     @Column(name = "enemy_unit_id")
     private Long id;
 
-    private Long systemUnitId;
-
     private Boolean killedYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,4 +27,18 @@ public class EnemyUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "round_id")
     private Round round;
+
+    private Integer hp;
+
+    private Integer defense;
+
+    private CardSuit suit;
+
+    private String number;
+
+    private Double xPos;
+
+    private Double yPos;
+
+    private UnitType type;
 }

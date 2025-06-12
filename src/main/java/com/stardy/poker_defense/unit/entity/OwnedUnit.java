@@ -17,9 +17,29 @@ public class OwnedUnit {
     @Column(name = "owned_unit_id")
     private Long id;
 
-    private Long systemUnitId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_user_id")
     private GameUser gameUser;
+
+    private String name;
+
+    private Integer hp;
+
+    private Integer attackPower;
+
+    private Integer attackRange;
+
+    private CardSuit suit;
+
+    private String number;
+
+    private Double xPos;
+
+    private Double yPos;
+
+    private String zone; // boss or player
+
+    private UnitType type;
+
+    private Integer price;
 }
