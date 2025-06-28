@@ -18,7 +18,9 @@ public class SystemRound {
 
     private Integer roundNumber;
 
-    private Long systemUnitId;
+    private Long systemNormalUnitId;
+
+    private Long systemBossUnitId;
 
     private Integer unitCount;
 

@@ -11,5 +11,6 @@ public class CreateSystemRoundRequestDto {
     private Integer roundNumber;
     private Integer unitCount;
     private Boolean bossRoundYn;
-    private Long systemUnitId;
+    private Long systemNormalUnitId;
+    private Long systemBossUnitId;
 }
