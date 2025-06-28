@@ -26,9 +26,11 @@ public class SystemUnit {
 
     private Integer defense;
 
+    @Enumerated(EnumType.STRING)
     private CardSuit suit;
 
     private String number;
 
+    @Enumerated(EnumType.STRING)
     private UnitType type;
 }

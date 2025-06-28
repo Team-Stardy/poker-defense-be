@@ -26,7 +26,8 @@ public class RoundServiceImpl implements RoundService {
         List<GetSystemRoundListResponseDto> resultList = systemRoundRepository.findAll().stream()
                 .map(sr -> GetSystemRoundListResponseDto.builder()
                         .roundNumber(sr.getRoundNumber())
-                        .systemUnitId(sr.getSystemUnitId())
+                        .systemNormalUnitId(sr.getSystemNormalUnitId())
+                        .systemBossUnitId(sr.getSystemBossUnitId())
                         .unitCount(sr.getUnitCount())
                         .bossRoundYn(sr.getBossRoundYn())
                         .build())
@@ -47,7 +48,8 @@ public class RoundServiceImpl implements RoundService {
                 .roundNumber(params.getRoundNumber())
                 .unitCount(params.getUnitCount())
                 .bossRoundYn(params.getBossRoundYn())
-                .systemUnitId(params.getSystemUnitId())
+                .systemNormalUnitId(params.getSystemNormalUnitId())
+                .systemBossUnitId(params.getSystemBossUnitId())
                 .build();
 
         systemRoundRepository.save(newSystemRound);

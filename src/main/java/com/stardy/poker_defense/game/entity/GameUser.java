@@ -50,4 +50,8 @@ public class GameUser {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void changeLife(int life) {
+        this.life = life;
+    }
 }

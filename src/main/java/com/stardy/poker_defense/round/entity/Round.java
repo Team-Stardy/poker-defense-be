@@ -39,4 +39,12 @@ public class Round {
 
     @OneToOne(mappedBy = "round", fetch = FetchType.LAZY)
     private BossUnit bossUnit;
+
+    public void changeStartedAt(LocalDateTime startTime) {
+        this.startedAt = startTime;
+    }
+
+    public void changeEndedAt(LocalDateTime endTime) {
+        this.endedAt = endTime;
+    }
 }
