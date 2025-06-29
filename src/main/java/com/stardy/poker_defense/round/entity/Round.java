@@ -23,13 +23,17 @@ public class Round {
     @Column(name = "round_id")
     private Long id;
 
-    private Long systemRoundId;
+    private Integer roundNumber;
+
+    private Integer unitCount;
+
+    private Boolean bossRoundYn;
 
     private LocalDateTime startedAt;
 
     private LocalDateTime endedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "game_id")
     private Game game;
 

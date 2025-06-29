@@ -26,4 +26,8 @@ public class User {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private GameUser gameUser;
+
+    public void enterRoom(Room room) {
+        this.room = room;
+    }
 }

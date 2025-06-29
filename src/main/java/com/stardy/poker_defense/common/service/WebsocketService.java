@@ -33,8 +33,6 @@ public class WebsocketService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    private final RoomRepository roomRepository;
-
     public void startGame(Game game) {
 
         List<Round> roundList = game.getRoundList();
@@ -42,7 +40,7 @@ public class WebsocketService {
 
         scheduler.execute(() -> {
             try {
-                playRounds(game, roundList, game.getRoom().getId());
+                playRounds(game, roundList, game.getRoom());
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -50,33 +48,34 @@ public class WebsocketService {
         });
     }
 
-    private void playRounds(Game game, List<Round> roundList, Long roomId) throws InterruptedException {
+    private void playRounds(Game game, List<Round> roundList, Room room) throws InterruptedException {
         for (Round round : roundList) {
-            // 1. 라운드 시작 알림 (적 유닛, 보스 정보 동시 전송)
-            sendRoundStart(round, roomId);
+            // 라운드 시작 알림 (적 유닛, 보스 정보 동시 전송)
+            sendRoundStart(round, room);
 
-            // 2. 라운드 타임루프 (예: 20초 or EnemyUnit, BossUnit 모두 killedYn==true 일 때까지 반복)
+            // 라운드 타임루프 (예: 20초 or EnemyUnit, BossUnit 모두 killedYn==true 일 때까지 반복)
             for (int sec = 1; sec <= 20; sec++) {
-                sendTimer(roomId, sec);
+                sendTimer(room, sec);
 
                 sleep(1000);
 
                 if (isRoundCleared(round)) break;
             }
 
-            // 3. 라운드 종료: 유저별 미처치 적 수로 생명 차감하고 메시지 전송
-            settleRound(round, roomId);
+            // 라운드 종료: 유저별 미처치 적 수로 생명 차감하고 메시지 전송
+            settleRound(round, room);
 
             sleep(2000);
         }
-        // (전체 라운드 종료 후 게임 종료 메시지, 결과 집계 등을 추가하실 수 있습니다)
+        // TODO: 전체 라운드 종료 후 게임 종료 메시지 전파 및 데이터 삭제
+
     }
 
-    private void sendRoundStart(Round round, Long roomId) {
-        List<EnemyUnit> enemyUnits = round.getEnemyUnitList();
+    private void sendRoundStart(Round round, Room room) {
+        List<EnemyUnit> enemyUnitList = round.getEnemyUnitList();
         BossUnit bossUnit = round.getBossUnit();
 
-        List<UnitInfoDto> enemyDtoList = enemyUnits.stream()
+        List<UnitInfoDto> enemyDtoList = enemyUnitList.stream()
                 .map(UnitInfoDto::fromEnemyUnit)
                 .collect(Collectors.toList());
 
@@ -92,26 +91,26 @@ public class WebsocketService {
                 .type(MessageType.ROUND_START)
                 .payload(payload)
                 .timestamp(LocalDateTime.now())
-                .roomId(String.valueOf(roomId))
+                .roomId(room.getId())
                 .build();
 
-        messagingTemplate.convertAndSend("/topic/game/" + roomId, wsMessage);
+        messagingTemplate.convertAndSend("/topic/room/" + room.getId(), wsMessage);
 
         // 라운드 시작 시각도 기록
         round.changeStartedAt(LocalDateTime.now());
     }
 
-    private void sendTimer(Long roomId, int elapsedTime) {
+    private void sendTimer(Room room, int elapsedTime) {
         TimerPayload timerPayload = TimerPayload.builder().elapsedTime(elapsedTime).build();
 
         WebsocketResponseDto<TimerPayload> wsMessage = WebsocketResponseDto.<TimerPayload>builder()
                 .type(MessageType.TIMER)
                 .payload(timerPayload)
                 .timestamp(LocalDateTime.now())
-                .roomId(String.valueOf(roomId))
+                .roomId(room.getId())
                 .build();
 
-        messagingTemplate.convertAndSend("/topic/game/" + roomId, wsMessage);
+        messagingTemplate.convertAndSend("/topic/game/" + room.getId(), wsMessage);
     }
 
     private boolean isRoundCleared(Round round) {
@@ -122,7 +121,7 @@ public class WebsocketService {
     }
 
     @Transactional
-    public void settleRound(Round round, Long roomId) {
+    public void settleRound(Round round, Room room) {
         Game game = round.getGame();
         for (GameUser gameUser : game.getGameUserList()) {
             long remain = round.getEnemyUnitList().stream()
@@ -145,9 +144,9 @@ public class WebsocketService {
                     .type(MessageType.ROUND_END)
                     .payload(payload)
                     .timestamp(LocalDateTime.now())
-                    .roomId(String.valueOf(roomId))
+                    .roomId(room.getId())
                     .build();
-            messagingTemplate.convertAndSend("/topic/room/" + roomId, wsMessage);
+            messagingTemplate.convertAndSend("/topic/room/" + room.getId(), wsMessage);
         }
 
         // 끝난 시각 기록

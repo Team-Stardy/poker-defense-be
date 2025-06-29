@@ -1,4 +1,4 @@
-package com.stardy.poker_defense.game;
+package com.stardy.poker_defense.game.controller;
 
 import com.stardy.poker_defense.common.response.ApiResponse;
 import com.stardy.poker_defense.game.dto.StartGameRequestDto;
@@ -23,7 +23,7 @@ public class GameController {
         StartGameResponseDto result = gameService.startGame(params);
 
         return ApiResponse.builder()
-                .data(null)
+                .data(result)
                 .status(HttpStatus.OK)
                 .message("게임이 시작되었습니다.")
                 .success();

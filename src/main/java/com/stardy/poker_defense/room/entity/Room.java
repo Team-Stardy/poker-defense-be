@@ -34,16 +34,26 @@ public class Room {
 
     private Long ownerId;
 
+    @Enumerated(EnumType.STRING)
     private RoomStatus status;
 
     @OneToOne(mappedBy = "room", fetch = FetchType.LAZY)
     private Game game;
 
     @Builder.Default
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ChattingMessage> chattingMessageList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<User> userList = new ArrayList<>();
+
+    public void startGame() {
+        this.status = RoomStatus.STARTED;
+        this.gameStartYn = true;
+    }
+
+    public void addGame(Game game) {
+        this.game = game;
+    }
 }
