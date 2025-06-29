@@ -84,6 +84,7 @@ public class GameServiceImpl implements GameService {
                 .build();
 
         gameRepository.save(newGame);
+        findRoom.addGame(newGame);
 
         Game findGame = gameRepository.findById(findRoom.getGame().getId())
                 .orElseThrow(() -> new RuntimeException("해당 게임은 존재하지 않습니다."));
@@ -114,6 +115,7 @@ public class GameServiceImpl implements GameService {
         for(int i=0; i<roundCount; i++) {
             SystemRound currentSystemRound = systemRoundList.get(i);
             Round newRound = Round.builder()
+                    .game(findGame)
                     .roundNumber(currentSystemRound.getRoundNumber())
                     .unitCount(currentSystemRound.getUnitCount())
                     .bossRoundYn(currentSystemRound.getBossRoundYn())
@@ -122,6 +124,7 @@ public class GameServiceImpl implements GameService {
             newRoundList.add(newRound);
         }
         roundRepository.saveAll(newRoundList);
+        findGame.addRoundList(newRoundList);
 
         // 라운드 별 보스 유닛, 게임 유저 별 적 유닛 생성
         List<SystemUnit> systemNormalUnitList = systemUnitRepository.findAllByType(UnitType.NORMAL);
@@ -131,27 +134,47 @@ public class GameServiceImpl implements GameService {
         List<BossUnit> newBossUnitList = new ArrayList<>();
         List<EnemyUnit> newEnemyUnitList = new ArrayList<>();
         List<GameUser> findGameUserList = gameUserRepository.findAllByGameId(findGame.getId());
+        int bossIdx = 0;
         for(Round round : findRoundList) {
 
-            // 보스 유닛 생성
-            for(SystemUnit systemBossUnit : systemBossUnitList) {
+            if(round.getBossRoundYn()) {
+                SystemUnit systemBossUnit = systemBossUnitList.get(bossIdx);
+                BossUnit newBossUnit = BossUnit.builder()
+                        .game(findGame)
+                        .round(round)
+                        .hp(systemBossUnit.getHp())
+                        .suit(systemBossUnit.getSuit())
+                        .number(systemBossUnit.getNumber())
+                        .defense(systemBossUnit.getDefense())
+                        .type(systemBossUnit.getType())
+                        .killedYn(false)
+                        .appearanceYn(false)
+                        .build();
 
-                if(round.getBossRoundYn()) {
-                    BossUnit newBossUnit = BossUnit.builder()
-                            .game(findGame)
-                            .round(round)
-                            .hp(systemBossUnit.getHp())
-                            .suit(systemBossUnit.getSuit())
-                            .number(systemBossUnit.getNumber())
-                            .defense(systemBossUnit.getDefense())
-                            .type(systemBossUnit.getType())
-                            .killedYn(false)
-                            .appearanceYn(false)
-                            .build();
-
-                    newBossUnitList.add(newBossUnit);
-                }
+                bossIdx++;
+                newBossUnitList.add(newBossUnit);
             }
+
+//            // 보스 유닛 생성
+//            for(SystemUnit systemBossUnit : systemBossUnitList) {
+//
+//
+//                if(round.getBossRoundYn()) {
+//                    BossUnit newBossUnit = BossUnit.builder()
+//                            .game(findGame)
+//                            .round(round)
+//                            .hp(systemBossUnit.getHp())
+//                            .suit(systemBossUnit.getSuit())
+//                            .number(systemBossUnit.getNumber())
+//                            .defense(systemBossUnit.getDefense())
+//                            .type(systemBossUnit.getType())
+//                            .killedYn(false)
+//                            .appearanceYn(false)
+//                            .build();
+//
+//                    newBossUnitList.add(newBossUnit);
+//                }
+//            }
 
             // 게임 유저 별 적 유닛 생성
             for(GameUser gameUser : findGameUserList) {

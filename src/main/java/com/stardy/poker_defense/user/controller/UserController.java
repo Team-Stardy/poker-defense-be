@@ -17,6 +17,9 @@ public class UserController {
 
     private final UserService userService;
 
+    /*
+    * 로그인 api
+    * */
     @PostMapping("/users/login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody LoginRequestDto params) {
 

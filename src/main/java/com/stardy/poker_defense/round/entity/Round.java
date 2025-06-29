@@ -33,7 +33,7 @@ public class Round {
 
     private LocalDateTime endedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "game_id")
     private Game game;
 
