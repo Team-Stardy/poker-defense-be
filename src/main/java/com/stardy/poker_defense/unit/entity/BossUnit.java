@@ -45,4 +45,6 @@ public class BossUnit {
     private Double yPos;
 
     private UnitType type;
+
+    private Boolean appearanceYn;
 }

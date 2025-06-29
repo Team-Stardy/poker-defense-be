@@ -12,5 +12,5 @@ public class WebsocketResponseDto<T>{
     private MessageType type;
     private T payload;
     private LocalDateTime timestamp;
-    private String roomId;
+    private Long roomId;
 }

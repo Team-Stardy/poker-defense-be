@@ -23,7 +23,11 @@ public class Round {
     @Column(name = "round_id")
     private Long id;
 
-    private Long systemRoundId;
+    private Integer roundNumber;
+
+    private Integer unitCount;
+
+    private Boolean bossRoundYn;
 
     private LocalDateTime startedAt;
 

@@ -46,4 +46,8 @@ public class Room {
     @Builder.Default
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<User> userList = new ArrayList<>();
+
+    public void startGame() {
+        this.status = RoomStatus.STARTED;
+    }
 }
