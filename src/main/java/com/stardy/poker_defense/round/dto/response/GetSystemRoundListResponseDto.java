@@ -9,7 +9,8 @@ import lombok.*;
 public class GetSystemRoundListResponseDto {
 
     private Integer roundNumber;
-    private Long systemUnitId;
+    private Long systemNormalUnitId;
+    private Long systemBossUnitId;
     private Integer unitCount;
     private Boolean bossRoundYn;
 }

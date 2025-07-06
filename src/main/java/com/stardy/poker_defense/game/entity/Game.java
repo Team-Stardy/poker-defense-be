@@ -32,18 +32,22 @@ public class Game {
     private LocalDateTime gameDuration;
 
     @Builder.Default
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GameUser> gameUserList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Round> roundList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BossUnit> bossUnitList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    public void addRoundList(List<Round> newRoundList) {
+        this.roundList = newRoundList;
+    }
 }

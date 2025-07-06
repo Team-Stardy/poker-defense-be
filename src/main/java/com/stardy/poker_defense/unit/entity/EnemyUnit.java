@@ -41,4 +41,6 @@ public class EnemyUnit {
     private Double yPos;
 
     private UnitType type;
+
+    private Boolean appearanceYn;
 }
