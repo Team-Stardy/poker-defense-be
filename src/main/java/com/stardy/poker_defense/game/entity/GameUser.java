@@ -51,7 +51,21 @@ public class GameUser {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void addOwnedUnit(OwnedUnit ownedUnit) {
+        ownedUnitList.add(ownedUnit);
+        ownedUnit.setGameUser(this);
+    }
+
     public void changeLife(int life) {
         this.life = life;
+    }
+
+    public void addKill() {
+        addKill(0);
+    }
+
+    public void addKill(int gold) {
+        this.killCount++;
+        this.gold += gold;
     }
 }

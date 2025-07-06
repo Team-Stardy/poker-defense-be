@@ -1,6 +1,7 @@
 package com.stardy.poker_defense.unit.entity;
 
 import com.stardy.poker_defense.game.entity.GameUser;
+import com.stardy.poker_defense.unit.vo.AttackResult;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class OwnedUnit {
     @Column(name = "owned_unit_id")
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_user_id")
     private GameUser gameUser;
@@ -41,5 +43,21 @@ public class OwnedUnit {
 
     private UnitType type;
 
-    private Integer price;
+    public static OwnedUnit from(SystemUnit systemUnit) {
+        return OwnedUnit.builder()
+                .id(systemUnit.getId())
+                .name(systemUnit.getName())
+                .hp(systemUnit.getHp())
+                .attackPower(systemUnit.getAttackPower())
+                .attackRange(systemUnit.getAttackRange())
+                .suit(systemUnit.getSuit())
+                .number(systemUnit.getNumber())
+                .zone("boss")
+                .type(systemUnit.getType())
+                .build();
+    }
+
+    public AttackResult attackNormal(EnemyUnit target) {
+        return target.attacked(attackPower);
+    }
 }
