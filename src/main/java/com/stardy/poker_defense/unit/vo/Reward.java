@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Reward {
     private Integer gold;
-    private Integer systemUnitId;
+    private Long systemUnitId;
 }

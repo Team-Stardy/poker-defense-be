@@ -1,5 +1,6 @@
 package com.stardy.poker_defense.unit.dto;
 
+import com.stardy.poker_defense.unit.entity.OwnedUnit;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +12,17 @@ public class AttackResponseDto {
     private int targetHp;
     private Integer killCount;
     private Integer gold;
+    private UnitRewardDto reward;
 
     public static AttackResponseDto notKilled(int damageDealt, int targetHp) {
-        return new AttackResponseDto(damageDealt, targetHp, null, null);
+        return new AttackResponseDto(damageDealt, targetHp, null, null, null);
     }
 
     public static AttackResponseDto killNormal(int damageDealt, int targetHp, Integer killCount, Integer gold) {
-        return new AttackResponseDto(damageDealt, targetHp, killCount, gold);
+        return new AttackResponseDto(damageDealt, targetHp, killCount, gold, null);
+    }
+
+    public static AttackResponseDto killBoss(int damageDealt, int targetHp, Integer killCount, Integer gold, OwnedUnit ownedUnit) {
+        return new AttackResponseDto(damageDealt, targetHp, killCount, gold, UnitRewardDto.from(ownedUnit));
     }
 }

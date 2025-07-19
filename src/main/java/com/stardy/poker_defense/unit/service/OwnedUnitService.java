@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface OwnedUnitService {
     AttackResponseDto attackNormal(long ownedUnitId, long targetId, long gameUserId);
+    AttackResponseDto attackBoss(long ownedUnitId, long targetId, long gameUserId);
     List<OwnedUnit> createRandom(int randomUnitCount, GameUser gameUser);
 }

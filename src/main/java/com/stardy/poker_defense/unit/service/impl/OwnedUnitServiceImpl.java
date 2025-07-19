@@ -3,6 +3,7 @@ package com.stardy.poker_defense.unit.service.impl;
 import com.stardy.poker_defense.game.entity.GameUser;
 import com.stardy.poker_defense.game.repository.GameUserRepository;
 import com.stardy.poker_defense.unit.dto.AttackResponseDto;
+import com.stardy.poker_defense.unit.entity.BossUnit;
 import com.stardy.poker_defense.unit.entity.EnemyUnit;
 import com.stardy.poker_defense.unit.entity.OwnedUnit;
 import com.stardy.poker_defense.unit.entity.SystemUnit;
@@ -52,8 +53,27 @@ public class OwnedUnitServiceImpl implements OwnedUnitService {
         if (attackResult.getKilled()) {
             GameUser gameUser = gameUserRepository.findById(gameUserId).orElseThrow(NoSuchElementException::new);
             gameUser.addKill(attackResult.getReward().getGold());
-            return AttackResponseDto.killNormal(attackResult.getDamageDealt(), attackResult.getTargetHp()
-                    , gameUser.getKillCount(), gameUser.getGold());
+            return AttackResponseDto.killNormal(attackResult.getDamageDealt(), attackResult.getTargetHp(),
+                    gameUser.getKillCount(), gameUser.getGold());
+        }
+        return AttackResponseDto.notKilled(attackResult.getDamageDealt(), attackResult.getTargetHp());
+    }
+
+    public AttackResponseDto attackBoss(long ownedUnitId, long targetId, long gameUserId) {
+        OwnedUnit ownedUnit = ownedUnitRepository.findById(ownedUnitId).orElseThrow(NoSuchElementException::new);
+        BossUnit bossUnit = bossUnitRepository.findById(targetId).orElseThrow(NoSuchElementException::new);
+        AttackResult attackResult = ownedUnit.attackBoss(bossUnit);
+
+        if (attackResult.getKilled()) {
+            GameUser gameUser = gameUserRepository.findById(gameUserId).orElseThrow(NoSuchElementException::new);
+            gameUser.addKill();
+            //랜덤유닛 보상 생성
+            OwnedUnit rewardUnit = OwnedUnit.from(
+                    systemUnitRepository.findById(bossUnit.getReward().getSystemUnitId()).orElseThrow(NoSuchElementException::new)
+            );
+
+            return AttackResponseDto.killBoss(attackResult.getDamageDealt(), attackResult.getTargetHp(),
+                    gameUser.getKillCount(), gameUser.getGold(), rewardUnit);
         }
         return AttackResponseDto.notKilled(attackResult.getDamageDealt(), attackResult.getTargetHp());
     }

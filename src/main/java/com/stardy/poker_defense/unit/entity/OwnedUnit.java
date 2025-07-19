@@ -60,4 +60,8 @@ public class OwnedUnit {
     public AttackResult attackNormal(EnemyUnit target) {
         return target.attacked(attackPower);
     }
+
+    public AttackResult attackBoss(BossUnit target) {
+        return target.attacked(attackPower);
+    }
 }
